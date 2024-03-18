@@ -46,6 +46,7 @@ async function Register (req, res) {
     
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await new User({
+        username: lowerCaseEmail,
         email: lowerCaseEmail,
         password: hashedPassword,
         address:lowerCaseAddress,
@@ -56,6 +57,32 @@ async function Register (req, res) {
     return res.json({message: "registration completed", newUser: newUser})
 
 
+}
+
+async function Updateprofile () {
+    // const {firstname, lastname, 
+    // othername, wallet_address} = req.body
+
+    try {
+        const patchData = req.body
+      if (!patchData){
+        throw createError.NotFound('No data was provided')
+      }
+      const user = await User.findOne({_id: req.userId});
+      if (!user){
+        throw createError.NotFound('User was not found')
+      }
+
+      // Add fields validation
+    //   Object.keys(patchData).forEach((field)=>{
+    //     if(field != 'email')
+    //       user[field] = patchData[field]
+    //   })
+      await user.save()
+      res.send({status:true,message:"Profile updated successfully.."})
+    } catch (error) {
+        next(error)
+    }
 }
 
 module.exports = Register

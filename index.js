@@ -6,9 +6,11 @@ config.config()
 const logger = require('morgan')
 // import {Register} from "./Controllers/AuthController.js"
 const Registration = require("./Controllers/AuthController")
+const getProfile = require("./Controllers/UpdateProfile")
 const Login = require("./Controllers/LoginController")
 const WebSockets = require('./utils/websockectUtils')
 const WebSocket = require('ws')
+const AuthRoute = require('./Routes/Auth.Routes')
 
 
 const app = express()
@@ -18,8 +20,17 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 
+app.use('/api', AuthRoute)
 
-
+// app.use((err, req, res, next) => {
+//     res.status(err.status || 500);
+//     res.send({
+//       error: {
+//         status: err.status || 500,
+//         message: err.message,
+//       },
+//     });
+//   });
 
 const port = 3000
 app.set("port", port)
@@ -34,7 +45,9 @@ app.get("/", (req, res) => {
     res.send("Hello world")
 })
 
+
 app.post('/register', Registration)
+app.get('/profile', getProfile)
 app.post('/login', Login)
 // app.listen(3000, function () {
 //     console.log("server started")
@@ -43,7 +56,7 @@ app.post('/login', Login)
 //     })
 // })
 
-// https://backend-i0l1ogzdr-amity808.vercel.app 
+// https://cypherschhol.vercel.app/login
 
 
 global.wss = new WebSocket.Server({ server })

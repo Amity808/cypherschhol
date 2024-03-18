@@ -32,29 +32,28 @@ const userSchema = new mongoose.Schema({
 });
 
 
-// userSchema.methods.pre('save', async function (next) {
-//   try {
-//     if (this.isNew){
-//       const salt = await bcrypt.genSalt(10)
-//       const hashedPassword = await bcrypt.hash(this.password, salt)
-//       this.password = hashedPassword,
-//       this.username = 'User ' + this._id
-//     }
-//     next()
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+userSchema.pre('save', async function (next) {
+  try {
+    if (this.isNew){
+      const salt = await bcrypt.genSalt(10)
+      const hashedPassword = await bcrypt.hash(this.password, salt)
+      this.password = hashedPassword,
+      this.username = 'User '+this._id
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
 
 
-// userSchema.methods.isValidPassword = async function (password) {
-//     try {
-//         return await bcrypt.compare(password, this.password)
-//     } catch (error) {
-//         throw error
-//     }
-// }
-
+userSchema.methods.isValidPassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password)
+  } catch (error) {
+    throw error
+  }
+}
 
 
 userSchema.methods.getProfile = async function () {

@@ -1,5 +1,5 @@
 const utils = {
-    jsonStringsWithSpace :((stringsArray) => {
+    joinStringsWithSpace :((stringsArray) => {
         return stringsArray.join(" ")
     })
 }
